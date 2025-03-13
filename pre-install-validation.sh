@@ -16,6 +16,6 @@ for node in $nodes; do
 done
 echo
 
-echo -e "\033[33mAre the nodes running a minimium kernel version of 5.8\033[0m"
+echo -e "\033[33mAre the nodes running a minimium kernel version of 5.8?\033[0m"
 kubectl describe nodes | grep --color=never -E 'Name:|Kernel Version:'
 echo
