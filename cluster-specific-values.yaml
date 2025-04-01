@@ -1,53 +1,31 @@
 cluster_config:
   # REQUIRED - The name of the cluster
-  name: "shield-test-cluster"
+  name: "abcd-prod-local"
   # REQUIRED - Tags you want to apply to the metadata sent to the Sysdig Backend.
   tags:
-    cluster: "shield-test-cluster"
-    vz-vsadid: "1111"
-    vz-vastid: "ABCD"
+    cluster: "abcd-prod-local"
+    vz-vsadid: "8888"
+    vz-vastid: "FFFF"
 
 sysdig_endpoint:
   # REQUIRED - The access key for the Sysdig Secure instance
   access_key:
 
 host:
-  image:
-    # The registry where the host shield images are stored
-    registry: quay.io
-    # The repository where the host shield images are stored
-    repository: sysdig
-    # The image name for the host shield
-    shield_name: agent-slim
-    # OPTIONAL - The pull secrets for the host shield images
-    pull_secrets: []
   priority_class:
     # OPTIONAL - The name of the priority class, typically system-node-critical
     name:
 
 cluster:
-  image:
-    # The registry where the cluster shield image is stored
-    registry: quay.io
-    # The repository where the cluster shield image is stored
-    repository: sysdig/cluster-shield
-    # OPTIONAL - The pull secrets for the cluster shield image
-    pull_secrets: []
   priority_class:
     # OPTIONAL - The name of the priority class, typically system-node-critical
     name:
 
-  # Specifies if Cluster Shield should be started in hostNetwork mode.
-  # This field is required if you are using a custom CNI where the control plane nodes are unable to initiate
-  # network connections to the pods, for example, using Calico CNI plugin on EKS.
-  # OPTIONAL
-  host_network: false
-
 proxy:
   # OPTIONAL - HTTP proxy to use for all HTTP requests
-  http_proxy:
+  http_proxy: ""
   # OPTIONAL - HTTPS proxy to use for all HTTPS requests
-  https_proxy:
+  https_proxy: ""
   # OPTIONAL - No proxy hosts and ips
   # If proxy is in use, exclude kubernetes cluster ip - kubectl get service kubernetes -o jsonpath='{.spec.clusterIP}'; echo
-  no_proxy:
+  no_proxy: "4.4.4.4"

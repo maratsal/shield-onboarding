@@ -4,15 +4,11 @@ echo -e "\033[33mIs helm installed and running a version > 3.9?\033[0m"
 helm version
 echo
 
-echo -e "\033[33mIs helm installed and running a version > 3.9?\033[0m"
-helm version
-echo
-
 echo -e "\033[33mAre you logged into the correct cluster?\033[0m"
-kubectl config get-contexts
+kubectl config current-context
 echo
 
-echo -e "\033[33mIs there enough resources available on the cluster?\033[0m"
+echo -e "\033[33mAre there enough resources available on the cluster?\033[0m"
 nodes=$(kubectl get nodes -o custom-columns=":.metadata.name")
 for node in $nodes; do
   echo "Node: $node"
