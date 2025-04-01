@@ -62,6 +62,6 @@ helm upgrade --install --create-namespace \
 # Run post-install validation
 echo
 echo "Sleeping for 5 minutes to allow for pods to start..."
-sleep 600
+sleep 300
 chmod +x ./helpers/post-install-validation.sh
 ./helpers/post-install-validation.sh $NAMESPACE
