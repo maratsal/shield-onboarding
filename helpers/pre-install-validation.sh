@@ -33,7 +33,7 @@ for node in $nodes; do
   kubectl describe node $node | grep --color=never -i "Allocated resources" -A 8
 done
 read -r response
-if [[ "$response" != "no" ]]; then
+if [[ "$response" != "yes" ]]; then
   echo -e "\033[31mExiting. Please reallocate resources and try again.\033[0m"
   exit 1
 fi
