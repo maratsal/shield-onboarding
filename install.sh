@@ -65,3 +65,19 @@ echo "Sleeping for 5 minutes to allow for pods to start..."
 sleep 300
 chmod +x ./helpers/post-install-validation.sh
 ./helpers/post-install-validation.sh $NAMESPACE
+
+# Commit configuration to git
+
+# Read cluster name from cluster-specific-values.yaml and save it as a variable
+CLUSTER_NAME=$(grep 'clusterName:' cluster-specific-values.yaml | awk '{print $2}')
+
+if [[ -z "$CLUSTER_NAME" ]]; then
+    echo "Error: Unable to find cluster name"
+    exit 1
+fi
+
+git checkout -b $CLUSTER_NAME
+git add .
+git commit -m "Commiting config for $CLUSTER_NAME on $(date +%Y-%m-%d)"
+git push -u origin $CLUSTER_NAME
+

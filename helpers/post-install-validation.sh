@@ -24,4 +24,3 @@ do
 	echo "========== " $podName
         kubectl logs -n "$namespace" $podName | grep 'level\":\"ERROR\"'
 done
-
