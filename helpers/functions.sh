@@ -123,11 +123,11 @@ update_namespace() {
 
 confirm_values() {
     echo "Contents of cluster-specific-values.yaml:"
-    cat cluster-specific-values.yaml
+    awk '{print "\033[1;33m" $0 "\033[0m"}' cluster-specific-values.yaml
     echo
     echo
     echo "Namespace: $NAMESPACE"
-    echo "Sysdig Access Key: $SYSDIG_ACCESS_KEY"
+    echo "${SYSDIG_ACCESS_KEY:0:6}******${SYSDIG_ACCESS_KEY: -6}"
     echo
     read -p "Do you want to proceed with these values? (yes/no): " PROCEED
 

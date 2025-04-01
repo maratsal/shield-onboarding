@@ -7,6 +7,14 @@ source ./helpers/functions.sh
 chmod +x ./helpers/pre-install-validation.sh
 ./helpers/pre-install-validation.sh
 
+# Ask the user if they want to continue after viewing the pre-install validations
+read -p "Do you want to continue with the installation after reviewing the pre-install validations? (yes/no): " CONTINUE_INSTALL
+
+if [[ "$CONTINUE_INSTALL" != "yes" ]]; then
+    echo "Installation aborted by the user."
+    exit 0
+fi
+
 # Check to see if the user wants to answer or if they've already filled out the cluster-specific-values.yaml manually
 read -p "Have you already updated the cluster-specific-values.yaml file? (yes/no): " UPDATE_FILE
 
@@ -52,6 +60,7 @@ helm upgrade --install --create-namespace \
 
 
 # Run post-install validation
+echo
 echo "Sleeping for 5 minutes to allow for pods to start..."
 sleep 600
 chmod +x ./helpers/post-install-validation.sh
