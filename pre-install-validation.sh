@@ -4,6 +4,10 @@ echo -e "\033[33mIs helm installed and running a version > 3.9?\033[0m"
 helm version
 echo
 
+echo -e "\033[33mIs helm installed and running a version > 3.9?\033[0m"
+helm version
+echo
+
 echo -e "\033[33mAre you logged into the correct cluster?\033[0m"
 kubectl config get-contexts
 echo

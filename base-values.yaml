@@ -161,9 +161,9 @@ host:
   security_context: {}
   image:
     # The registry where the host shield images are stored
-    registry: quay.io
+    registry: jfrog.idonthaveany.boats
     # The repository where the host shield images are stored
-    repository: sysdig
+    repository: sysdigimages
     # The image name for the host shield kmodule drive
     kmodule_name: agent-kmodule
     # The image name for the host shield
@@ -293,9 +293,9 @@ host:
 cluster:
   image:
     # The registry where the cluster shield image is stored
-    registry: quay.io
+    registry: jfrog.idonthaveany.boats
     # The repository where the cluster shield image is stored
-    repository: sysdig/cluster-shield
+    repository: sysdigimages/cluster-shield
     # The tag for the cluster shield image
     tag: 1.9.0
     # The pull policy for the cluster shield image
@@ -363,6 +363,12 @@ cluster:
   additional_settings:
     log_level: info
     monitoring_port: 8080
+    cluster_scanner:
+      image_sbom_extractor:
+        registries_configuration:
+          treat_404_as_auth_error: true                        # Custom Config
+          fallback_to_tag_on_digest_failure: true              # Custom Config
+          fallback_to_sbom_api_search_on_digest_failure: true  # Custom Config
   # Automatically adds the Prometheus annotations to the Cluster Shield pods
   enable_prometheus_scraping: true
   probes:
