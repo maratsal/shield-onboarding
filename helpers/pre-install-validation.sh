@@ -2,6 +2,23 @@
 
 echo -e "\033[32mRunning pre-install validation...\n\033[0m"
 
+
+#
+# yq alias
+#
+if ! command -v yq &> /dev/null; then
+  arch=$(uname -m)
+  if [[ "$arch" == "x86_64" ]]; then
+    alias yq=./helpers/yq_linux_amd64
+  elif [[ "$arch" == "aarch64" ]]; then
+    alias yq=./helpers/yq_linux_arm64
+  else
+    echo -e "\033[31mUnsupported platform type: $arch. Please install yq manually.\033[0m"
+    exit 1
+  fi
+fi
+
+
 #
 # Check for kubectl or oc binary presence
 #

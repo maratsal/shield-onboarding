@@ -224,7 +224,7 @@ update_namespace() {
 
 confirm_values() {
     echo "Contents of cluster-specific-values.yaml:"
-    awk '{print "\033[1;33m" $0 "\033[0m"}' cluster-specific-values.yaml
+    yq cluster-specific-values.yaml
     echo
     echo
     echo -e "\033[1;33mInstallation Namespace: $NAMESPACE\033[0m"
@@ -277,4 +277,27 @@ update_priority_class() {
         echo "No priority class will be used."
     fi
     echo
+}
+
+update_resource_sizing() {
+    # Determine the cluster size based on the number of nodes
+    NODE_COUNT=$(kubectl get nodes --no-headers | wc -l)
+
+    if [[ "$NODE_COUNT" -lt 2 ]]; then
+        # Path to the YAML file
+        YAML_FILE="cluster-specific-values.yaml"
+
+        # Check if the 'host.resources.shield' section exists, if not, add it
+        if ! yq eval '.host.resources.shield' "$YAML_FILE" &>/dev/null; then
+            yq eval -i '.host.resources.shield = {"requests": {"cpu": "100m", "memory": "256Mi"}, "limits": {"cpu": "500m", "memory": "1024Mi"}}' "$YAML_FILE"
+        fi
+
+        # Check if the 'cluster.resources' section exists, if not, add it
+        if ! yq eval '.cluster.resources' "$YAML_FILE" &>/dev/null; then
+            yq eval -i '.cluster.resources = {"requests": {"cpu": "100m", "memory": "256Mi"}, "limits": {"cpu": "1000m", "memory": "2048Mi"}}' "$YAML_FILE"
+        fi
+        
+    elif [[ "$NODE_COUNT" -gt 12 ]]; then
+        echo "Large cluster"
+    fi
 }

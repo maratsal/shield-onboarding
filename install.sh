@@ -47,6 +47,7 @@ if grep -q "CHANGE_ME" cluster-specific-values.yaml; then
     update_cluster_name      # Get Cluster Name and Update Values
     update_proxy_settings    # Get Proxy Settings and Update Values
     update_priority_class    # Get Priority Class and Update Values
+    update_resource_sizing   # Get Resource Sizing and Update Values
 else
     echo "Skipping updates to cluster-specific-values.yaml as it was already updated manually."
     echo
