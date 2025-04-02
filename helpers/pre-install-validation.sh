@@ -3,11 +3,16 @@
 echo -e "\033[32mRunning pre-install validation...\n\033[0m"
 
 #
-# Check for kubectl binary presence
+# Check for kubectl or oc binary presence
 #
 if ! command -v kubectl &> /dev/null; then
-  echo -e "\033[31mkubectl is not installed or not in PATH. Please install kubectl before proceeding.\033[0m"
-  exit 1
+  if command -v oc &> /dev/null; then
+    echo -e "\033[33mkubectl is not installed, but oc is available. Creating an alias for kubectl as oc.\033[0m"
+    alias kubectl=oc
+  else
+    echo -e "\033[31mkubectl or oc is not installed or not in PATH. Please install kubectl or oc before proceeding.\033[0m"
+    exit 1
+  fi
 else
   echo -e "\033[32mkubectl is installed.\033[0m"
 fi
