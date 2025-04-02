@@ -7,12 +7,14 @@ source ./helpers/functions.sh
 chmod +x ./helpers/pre-install-validation.sh
 ./helpers/pre-install-validation.sh
 
-# Ask the user if they want to continue after viewing the pre-install validations
-read -p "Do you want to continue with the installation after reviewing the pre-install validations? (yes/no): " CONTINUE_INSTALL
-
-if [[ "$CONTINUE_INSTALL" != "yes" ]]; then
-    echo "Installation aborted by the user."
-    exit 0
+# Check the exit code of pre-install-validation.sh
+if [ $? -ne 0 ]; then
+    echo "Pre-install validation FAILED."
+    read -p "Do you still want to continue with the installation? (yes/no): " CONTINUE_AFTER_FAILURE
+    if [[ "$CONTINUE_AFTER_FAILURE" != "yes" ]]; then
+        echo "Installation aborted by the user due to pre-install validation failure."
+        exit 1
+    fi
 fi
 
 # Check to see if the user wants to answer or if they've already filled out the cluster-specific-values.yaml manually
@@ -28,6 +30,13 @@ if [[ "$UPDATE_FILE" == "no" ]]; then
 else
     echo "Skipping updates to cluster-specific-values.yaml as it was already updated manually."
     echo
+fi
+
+# Check to see if access key was specified in cluster-specific-values.yaml
+ACCESS_KEY=$(grep 'access_key:' cluster-specific-values.yaml | awk '{print $2}' | tr -d '"')
+
+if [[ -z "$ACCESS_KEY" && -z "$SYSDIG_ACCESS_KEY" ]]; then
+    update_sysdig_accesskey
 fi
 
 # Get the namespace from the user
@@ -69,7 +78,7 @@ chmod +x ./helpers/post-install-validation.sh
 # Commit configuration to git
 
 # Read cluster name from cluster-specific-values.yaml and save it as a variable
-CLUSTER_NAME=$(grep 'clusterName:' cluster-specific-values.yaml | awk '{print $2}')
+CLUSTER_NAME=$(grep 'name:' cluster-specific-values.yaml | head -1 | awk '{print $2}' | tr -d '"')
 
 if [[ -z "$CLUSTER_NAME" ]]; then
     echo "Error: Unable to find cluster name"
