@@ -9,7 +9,14 @@ update_vz_vsadid() {
         RESPONSE="yes"
     else
         echo "The current value of 'vz-vsadid' is: $CURRENT_VZ_VSADID"
-        read -p "Do you want to change it? (yes/no): " RESPONSE
+        while true; do
+            read -p "Do you want to change it? (yes/no): " RESPONSE
+            if [[ "$RESPONSE" == "yes" || "$RESPONSE" == "no" ]]; then
+                break
+            else
+                echo "Please enter 'yes' or 'no'."
+            fi
+        done
     fi
 
     if [[ "$RESPONSE" == "yes" ]]; then
@@ -34,7 +41,14 @@ update_vz_vastid() {
         RESPONSE="yes"
     else
         echo "The current value of 'vz-vastid' is: $CURRENT_VZ_VASTID"
-        read -p "Do you want to change it? (yes/no): " RESPONSE
+        while true; do
+            read -p "Do you want to change it? (yes/no): " RESPONSE
+            if [[ "$RESPONSE" == "yes" || "$RESPONSE" == "no" ]]; then
+                break
+            else
+                echo "Please enter 'yes' or 'no'."
+            fi
+        done
     fi
 
     if [[ "$RESPONSE" == "yes" ]]; then
@@ -58,7 +72,14 @@ update_cluster_name() {
         RESPONSE="yes"
     else
         echo "The current cluster name is: $CURRENT_CLUSTER_NAME"
-        read -p "Do you want to change it? (yes/no): " RESPONSE
+        while true; do
+            read -p "Do you want to change it? (yes/no): " RESPONSE
+            if [[ "$RESPONSE" == "yes" || "$RESPONSE" == "no" ]]; then
+                break
+            else
+                echo "Please enter 'yes' or 'no'."
+            fi
+        done
     fi
 
     if [[ "$RESPONSE" == "yes" ]]; then
@@ -172,7 +193,14 @@ confirm_values() {
     echo -e "\033[1;33mInstallation Namespace: $NAMESPACE\033[0m"
     echo -e "\033[1;33mInstallation Access Key: ${SYSDIG_ACCESS_KEY:0:6}******${SYSDIG_ACCESS_KEY: -6}\033[0m"
     echo
-    read -p "Do you want to proceed with these values? (yes/no): " PROCEED
+    while true; do
+        read -p "Do you want to proceed with these values? (yes/no): " PROCEED
+        if [[ "$PROCEED" == "yes" || "$PROCEED" == "no" ]]; then
+            break
+        else
+            echo "Please enter 'yes' or 'no'."
+        fi
+    done
 
     if [[ "$PROCEED" != "yes" ]]; then
         echo "Exiting installation as per user request."
@@ -183,7 +211,14 @@ confirm_values() {
 }
 
 update_priority_class() {
-    read -p "Do you want to specify a Kubernetes priority class? (yes/no): " USE_PRIORITY_CLASS
+    while true; do
+        read -p "Do you want to specify a Kubernetes priority class? (yes/no): " USE_PRIORITY_CLASS
+        if [[ "$USE_PRIORITY_CLASS" == "yes" || "$USE_PRIORITY_CLASS" == "no" ]]; then
+            break
+        else
+            echo "Please enter 'yes' or 'no'."
+        fi
+    done
     
     if [[ "$USE_PRIORITY_CLASS" == "yes" ]]; then
         # Default value suggestion

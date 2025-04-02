@@ -10,7 +10,14 @@ chmod +x ./helpers/pre-install-validation.sh
 # Check the exit code of pre-install-validation.sh
 if [ $? -ne 0 ]; then
     echo -e "\e[31mPre-install validation FAILED.\e[0m"
-    read -p "Do you still want to continue with the installation? (yes/no): " CONTINUE_AFTER_FAILURE
+    while true; do
+        read -p "Do you still want to continue with the installation? (yes/no): " CONTINUE_AFTER_FAILURE
+        if [[ "$CONTINUE_AFTER_FAILURE" == "yes" || "$CONTINUE_AFTER_FAILURE" == "no" ]]; then
+            break
+        else
+            echo "Please enter 'yes' or 'no'."
+        fi
+    done
     if [[ "$CONTINUE_AFTER_FAILURE" != "yes" ]]; then
         echo "Installation aborted by the user due to pre-install validation failure."
         exit 1
@@ -32,10 +39,9 @@ if [[ -z "$REGISTRY" ]]; then
     exit 1
 fi
 
-# Check to see if the user wants to answer or if they've already filled out the cluster-specific-values.yaml manually
-read -p "Have you already updated the cluster-specific-values.yaml file? (yes/no): " UPDATE_FILE
+# If change_me is present in cluster-specific-values.yaml assume they need to update the values
 
-if [[ "$UPDATE_FILE" == "no" ]]; then
+if grep -q "CHANGE_ME" cluster-specific-values.yaml; then
     update_sysdig_accesskey  # Get Access Key and Set as Variable
     update_cluster_name      # Get Cluster Name and Update Values
     update_vz_vsadid         # Get vz-vsadid and Update Values   
