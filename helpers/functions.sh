@@ -270,9 +270,25 @@ update_priority_class() {
     done
     
     if [[ "$USE_PRIORITY_CLASS" == "yes" ]]; then
-        # Default value suggestion
-        read -p "Enter the priority class name [system-node-critical]: " PRIORITY_CLASS_NAME
+        # Retrieve the list of available priority classes
+        PRIORITY_CLASSES=$(kubectl get priorityclass -o custom-columns="NAME:.metadata.name" --no-headers)
         
+        # Default value suggestion
+        while true; do
+            echo "Available priority classes:"
+            echo "$PRIORITY_CLASSES"
+            read -p "Enter the priority class name [system-node-critical]: " PRIORITY_CLASS_NAME
+            
+            # Use default if nothing was entered
+            PRIORITY_CLASS_NAME=${PRIORITY_CLASS_NAME:-system-node-critical}
+            
+            # Check if the entered value is in the list of available priority classes
+            if echo "$PRIORITY_CLASSES" | grep -qw "$PRIORITY_CLASS_NAME"; then
+            break
+            else
+            echo "Invalid priority class name. Please choose from the available priority classes."
+            fi
+        done
         # Use default if nothing was entered
         PRIORITY_CLASS_NAME=${PRIORITY_CLASS_NAME:-system-node-critical}
         
