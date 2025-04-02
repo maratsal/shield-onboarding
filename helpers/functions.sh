@@ -25,7 +25,6 @@ update_vz_vsadid() {
         # Update the value in the YAML file
         yq eval -i '.cluster_config.tags.vz-vsadid = "'"$NEW_VZ_VSADID"'"' cluster-specific-values.yaml
 
-        echo "'vz-vsadid' has been updated to: $NEW_VZ_VSADID"
         CURRENT_VZ_VSADID=$NEW_VZ_VSADID
     else
         echo "No changes made to 'vz-vsadid'."
@@ -57,7 +56,6 @@ update_vz_vastid() {
         # Update the value in the YAML file
         yq eval -i '.cluster_config.tags.vz-vastid = "'"$NEW_VZ_VASTID"'"' cluster-specific-values.yaml
 
-        echo "'vz-vastid' has been updated to: $NEW_VZ_VASTID"
         CURRENT_VZ_VASTID=$NEW_VZ_VASTID
     else
         echo "No changes made to 'vz-vastid'."
