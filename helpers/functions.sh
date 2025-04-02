@@ -118,7 +118,7 @@ update_cluster_name() {
         fi
 
         while true; do
-            read -p "Enter the new cluster name: " -e -i $BUSINESS_UNIT-$PLATFORM-$ENVIRONMENT-$CURRENT_VZ_VASTID-$CURRENT_VZ_VSADID NEW_CLUSTER_NAME
+            read -p "Enter the new cluster name: " -e -i $(echo $BUSINESS_UNIT-$PLATFORM-$ENVIRONMENT-$CURRENT_VZ_VASTID-$CURRENT_VZ_VSADID | tr -d '"') NEW_CLUSTER_NAME
 
             # Validate cluster name: must be 1-253 characters, lowercase, alphanumeric, or '-', and must start/end with alphanumeric
             if [[ "$NEW_CLUSTER_NAME" =~ ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$ ]] && [[ ${#NEW_CLUSTER_NAME} -le 253 ]]; then
