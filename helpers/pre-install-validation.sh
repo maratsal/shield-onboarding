@@ -17,7 +17,7 @@ if kubectl get all --all-namespaces --show-labels | grep -q "sysdig/"; then
   echo -e "\033[31mSysdig components detected. Please remove them before proceeding.\033[0m"
   exit 1
 else
-  echo -e "\033[32mNo existing Sysdig components found. Proceeding with installation.\033[0m"
+  echo -e "\033[32mNo existing Sysdig components found.\033[0m"
 fi
 
 #
@@ -96,7 +96,6 @@ fi
 #
 # Validate Kernel Versions For Universal EBPF Support
 #
-echo -e "\033[33mChecking if nodes are running a minimum kernel version of 5.8...\033[0m"
 error_found=false
 kubectl get nodes -o jsonpath='{range .items[*]}{.metadata.name} {.status.nodeInfo.kernelVersion}{"\n"}{end}' | while read -r node kernel_version; do
   version_check=$(echo "$kernel_version" | awk -F. '{printf "%d%02d", $1, $2}')

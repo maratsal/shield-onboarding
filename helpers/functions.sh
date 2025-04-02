@@ -5,7 +5,7 @@ update_vz_vsadid() {
     CURRENT_VZ_VSADID=$(grep 'vz-vsadid:' cluster-specific-values.yaml | awk '{print $2}')
 
     # Display the current value to the user and ask if they want to change it
-    if [[ "$CURRENT_VZ_VSADID" == "CHANGE_ME" ]]; then
+    if [[ "$CURRENT_VZ_VSADID" == "\"CHANGE_ME\"" ]]; then
         RESPONSE="yes"
     else
         echo "The current value of 'vz-vsadid' is: $CURRENT_VZ_VSADID"
@@ -30,7 +30,7 @@ update_vz_vastid() {
     CURRENT_VZ_VASTID=$(grep 'vz-vastid:' cluster-specific-values.yaml | awk '{print $2}')
 
     # Display the current value to the user and ask if they want to change it
-    if [[ "$CURRENT_VZ_VASTID" == "CHANGE_ME" ]]; then
+    if [[ "$CURRENT_VZ_VASTID" == "\"CHANGE_ME\"" ]]; then
         RESPONSE="yes"
     else
         echo "The current value of 'vz-vastid' is: $CURRENT_VZ_VASTID"
@@ -54,7 +54,7 @@ update_cluster_name() {
     CURRENT_CLUSTER_NAME=$(grep 'name:' cluster-specific-values.yaml | head -1 | awk '{print $2}' | tr -d '"')
 
     # Display the current value to the user and ask if they want to change it
-    if [[ "$CURRENT_CLUSTER_NAME" == "CHANGE_ME" ]]; then
+    if [[ "$CURRENT_CLUSTER_NAME" == "\"CHANGE_ME\"" ]]; then
         RESPONSE="yes"
     else
         echo "The current cluster name is: $CURRENT_CLUSTER_NAME"
