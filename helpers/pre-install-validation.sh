@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo -e "Running pre-install validation script...\n"
+echo -e "Running pre-install validation...\n"
 
 #
 # Check for kubectl binary presence
@@ -81,14 +81,13 @@ done
 # Validated resources
 #
 echo
-echo -e "\033[33mACheck resource availability:\033[0m"
+echo -e "\033[33mCheck resource availability:\033[0m"
 nodes=$(kubectl get nodes -o custom-columns=":.metadata.name")
 for node in $nodes; do
   echo "Node: $node"
   kubectl describe node $node | grep --color=never -i "Allocated resources" -A 8
 done
-echo -e "\033[33mAre there enough resources available on the cluster nodes (yes/no)?\033[0m"
-read -r response
+read -r -p $'Are there enough resources available on the cluster nodes (yes/no)? ' response
 if [[ "$response" != "yes" ]]; then
   echo -e "\033[31mExiting. Please reallocate resources and try again.\033[0m"
   exit 1
@@ -100,7 +99,6 @@ fi
 echo -e "\033[33mChecking if nodes are running a minimum kernel version of 5.8...\033[0m"
 error_found=false
 kubectl get nodes -o jsonpath='{range .items[*]}{.metadata.name} {.status.nodeInfo.kernelVersion}{"\n"}{end}' | while read -r node kernel_version; do
-  echo "Node: $node, Kernel Version: $kernel_version"
   version_check=$(echo "$kernel_version" | awk -F. '{printf "%d%02d", $1, $2}')
   if (( version_check < 508 )); then
     echo -e "\033[31mNode $node has kernel version $kernel_version, which is less than 5.8. Exiting.\033[0m"

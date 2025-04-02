@@ -101,10 +101,11 @@ update_proxy_settings() {
             fi
         done
 
+        no_proxy_cluster_ip=$(kubectl get service kubernetes -o jsonpath='{.spec.clusterIP}'; echo)
+        no_proxy_cluster_ip+=",localhost,127.0.0.1"
         # Get no_proxy list
-        echo "Enter hosts/IPs to exclude from proxy (comma-separated, leave empty if none)"
         while true; do
-            read -p "Example: localhost,127.0.0.1,10.0.0.0/8: " NO_PROXY
+            read -p "Enter NO_PROXY hosts (comma seperated, leave empty if none): " -e -i $no_proxy_cluster_ip NO_PROXY
             if [[ "$NO_PROXY" =~ ^([a-zA-Z0-9.-]+|[0-9]{1,3}(\.[0-9]{1,3}){3}(/[0-9]{1,2})?)(,([a-zA-Z0-9.-]+|[0-9]{1,3}(\.[0-9]{1,3}){3}(/[0-9]{1,2})?))*$ ]]; then
             break
             else
