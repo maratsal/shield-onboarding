@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo -e "\033[32mRunning pre-install validation...\n\033[0m"
+echo -e "\033[32mRunning pre-install validation...\033[0m"
 
 
 #
