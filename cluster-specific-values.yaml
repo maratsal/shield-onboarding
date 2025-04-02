@@ -2,15 +2,15 @@
 # OCI Registry: jfrog.idonthaveany.boats
 cluster_config:
   # REQUIRED - The name of the cluster
-  name: "abcd-prod-local"
+  name: "CHANGE_ME"
   # REQUIRED - Tags you want to apply to the metadata sent to the Sysdig Backend.
   tags:
-    cluster: "abcd-prod-local"
-    vz-vsadid: "8888"
-    vz-vastid: "FFFF"
+    cluster: "CHANGE_ME"
+    vz-vsadid: "CHANGE_ME"
+    vz-vastid: "CHANGE_ME"
 
 sysdig_endpoint:
-  # REQUIRED - The access key for the Sysdig Secure instance
+  # REQUIRED IF NOT USING INSTALL.SH - The access key for the Sysdig Secure instance
   access_key:
 
 host:
@@ -28,6 +28,6 @@ proxy:
   http_proxy: ""
   # OPTIONAL - HTTPS proxy to use for all HTTPS requests
   https_proxy: ""
-  # OPTIONAL - No proxy hosts and ips
-  # If proxy is in use, exclude kubernetes cluster ip - kubectl get service kubernetes -o jsonpath='{.spec.clusterIP}'; echo
-  no_proxy: "4.4.4.4"
+  # OPTIONAL - NO_PROXY comma delimited hosts and ips
+  # If proxy is in use, exclude kubernetes cluster ip - kubectl get service kubernetes -o jsonpath='{.spec.clusterIP}'; echo 
+  no_proxy: ""

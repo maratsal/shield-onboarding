@@ -18,8 +18,8 @@ if [ $? -ne 0 ]; then
 fi
 
 # Extract values from cluster-specific-values.yaml
-SHIELD_CHART_VERSION=$(grep '# Shield Chart:' cluster-specific-values.yaml | awk '{print $3}')
-REGISTRY=$(grep '# OCI Registry:' cluster-specific-values.yaml | awk '{print $3}')
+SHIELD_CHART_VERSION=$(grep '# Shield Chart:' cluster-specific-values.yaml | awk '{print $4}')
+REGISTRY=$(grep '# OCI Registry:' cluster-specific-values.yaml | awk '{print $4}')
 
 # Check if the values exist, if not, error out
 if [[ -z "$SHIELD_CHART_VERSION" ]]; then
