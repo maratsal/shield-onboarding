@@ -47,7 +47,14 @@ fi
 # Kubernetes Current Context Verification
 #
 current_context=$(kubectl config current-context)
-read -r -p $'Are you logged into the correct cluster '"$current_context"' (yes/no)? ' response
+while true; do
+  read -r -p $'Are you logged into the correct cluster '"$current_context"' (yes/no)? ' response
+  if [[ "$response" == "yes" || "$response" == "no" ]]; then
+    break
+  else
+    echo "Please enter 'yes' or 'no'."
+  fi
+done
 if [[ "$response" != "yes" ]]; then
   echo -e "\033[31mExiting. Please log into the correct cluster and try again.\033[0m"
   exit 1

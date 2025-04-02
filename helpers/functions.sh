@@ -296,24 +296,32 @@ update_resource_sizing() {
     # Determine the cluster size based on the number of nodes
     NODE_COUNT=$(kubectl get nodes --no-headers | wc -l)
 
-    # TODO Sizing
+    # Path to the YAML files
+    YAML_FILE="cluster-specific-values.yaml"
+    PROFILE_FILE="./helpers/sizing-template.yaml"
+
+    # Determine the cluster profile based on the node count
     if [[ "$NODE_COUNT" -lt 2 ]]; then
-        # Path to the YAML file
-        YAML_FILE="cluster-specific-values.yaml"
-
-        # Check if the 'host.resources.shield' section exists, if not, add it
-        yq eval '.host.resources.shield' "$YAML_FILE" -e &>/dev/null
-        if [[ $? -ne 0 ]]; then
-            yq eval -i --prettyPrint '.host.resources.shield = {"requests": {"cpu": "100m", "memory": "256Mi"}, "limits": {"cpu": "500m", "memory": "1024Mi"}}' "$YAML_FILE"
-        fi
-
-        # Check if the 'cluster.resources' section exists, if not, add it
-        yq eval '.cluster.resources' "$YAML_FILE" -e &>/dev/null
-        if [[ $? -ne 0 ]]; then
-            yq eval -i --prettyPrint '.cluster.resources = {"requests": {"cpu": "100m", "memory": "256Mi"}, "limits": {"cpu": "1000m", "memory": "2048Mi"}}' "$YAML_FILE"
-        fi
-        
-    elif [[ "$NODE_COUNT" -gt 12 ]]; then
-        echo "TODO - Large cluster"
+        PROFILE="small"
+    elif [[ "$NODE_COUNT" -ge 2 && "$NODE_COUNT" -le 12 ]]; then
+        PROFILE="medium"
+    else
+        PROFILE="large"
     fi
+
+    # Get the resource values for the determined profile
+    SHIELD_REQUEST_CPU=$(yq eval ".profiles.$PROFILE.host.resources.shield.requests.cpu" "$PROFILE_FILE")
+    SHIELD_REQUEST_MEMORY=$(yq eval ".profiles.$PROFILE.host.resources.shield.requests.memory" "$PROFILE_FILE")
+    SHIELD_LIMIT_CPU=$(yq eval ".profiles.$PROFILE.host.resources.shield.limits.cpu" "$PROFILE_FILE")
+    SHIELD_LIMIT_MEMORY=$(yq eval ".profiles.$PROFILE.host.resources.shield.limits.memory" "$PROFILE_FILE")
+    
+    CLUSTER_REQUEST_CPU=$(yq eval ".profiles.$PROFILE.cluster.resources.requests.cpu" "$PROFILE_FILE")
+    CLUSTER_REQUEST_MEMORY=$(yq eval ".profiles.$PROFILE.cluster.resources.requests.memory" "$PROFILE_FILE")
+    CLUSTER_LIMIT_CPU=$(yq eval ".profiles.$PROFILE.cluster.resources.limits.cpu" "$PROFILE_FILE")
+    CLUSTER_LIMIT_MEMORY=$(yq eval ".profiles.$PROFILE.cluster.resources.limits.memory" "$PROFILE_FILE")
+
+    # Apply the resource settings to the cluster-specific-values.yaml file
+    yq eval -i --prettyPrint ".host.resources.shield = {\"requests\": {\"cpu\": \"$SHIELD_REQUEST_CPU\", \"memory\": \"$SHIELD_REQUEST_MEMORY\"}, \"limits\": {\"cpu\": \"$SHIELD_LIMIT_CPU\", \"memory\": \"$SHIELD_LIMIT_MEMORY\"}}" "$YAML_FILE"
+    
+    yq eval -i --prettyPrint ".cluster.resources = {\"requests\": {\"cpu\": \"$CLUSTER_REQUEST_CPU\", \"memory\": \"$CLUSTER_REQUEST_MEMORY\"}, \"limits\": {\"cpu\": \"$CLUSTER_LIMIT_CPU\", \"memory\": \"$CLUSTER_LIMIT_MEMORY\"}}" "$YAML_FILE"
 }
