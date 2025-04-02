@@ -157,7 +157,14 @@ update_sysdig_accesskey() {
 
 update_proxy_settings() {
     # Ask if proxy is required
-    read -p "Do you require a proxy for network connections? (yes/no): " PROXY_REQUIRED
+    while true; do
+        read -p "Do you require a proxy for network connections? (yes/no): " PROXY_REQUIRED
+        if [[ "$PROXY_REQUIRED" == "yes" || "$PROXY_REQUIRED" == "no" ]]; then
+            break
+        else
+            echo "Please enter 'yes' or 'no'."
+        fi
+    done
 
     if [[ "$PROXY_REQUIRED" == "yes" ]]; then
         # Get HTTP proxy
