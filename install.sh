@@ -103,6 +103,8 @@ if [[ -z "$CLUSTER_NAME" ]]; then
     exit 1
 fi
 
+echo 
+echo "Committing changes to Git repository..."
 git checkout -b $CLUSTER_NAME
 git add .
 git commit -m "Commiting config for $CLUSTER_NAME on $(date +%Y-%m-%d)"
