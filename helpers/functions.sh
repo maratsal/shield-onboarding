@@ -285,18 +285,18 @@ update_priority_class() {
         # Use default if nothing was entered
         PRIORITY_CLASS_NAME=${PRIORITY_CLASS_NAME:-system-node-critical}
         
-        # Update both priority class name entries in the YAML file
-        sed -i "/host:/{:a;n;/priority_class:/{:b;n;/name:/s/name:.*/name: \"$PRIORITY_CLASS_NAME\"/;};/priority_class:/ba;}" cluster-specific-values.yaml
-        sed -i "/cluster:/{:a;n;/priority_class:/{:b;n;/name:/s/name:.*/name: \"$PRIORITY_CLASS_NAME\"/;};/priority_class:/ba;}" cluster-specific-values.yaml
+        # Update both priority class name entries in the YAML file using yq
+        yq eval -i '.host.priority_class.name = "'"$PRIORITY_CLASS_NAME"'"' cluster-specific-values.yaml
+        yq eval -i '.cluster.priority_class.name = "'"$PRIORITY_CLASS_NAME"'"' cluster-specific-values.yaml
         
         echo "Priority class set to: $PRIORITY_CLASS_NAME for both host and cluster components."
-    else
-        # Clear any existing priority class settings
-        sed -i "/host:/{:a;n;/priority_class:/{:b;n;/name:/s/name:.*/name:/;};/priority_class:/ba;}" cluster-specific-values.yaml
-        sed -i "/cluster:/{:a;n;/priority_class:/{:b;n;/name:/s/name:.*/name:/;};/priority_class:/ba;}" cluster-specific-values.yaml
+        else
+        # Clear any existing priority class settings using yq
+        yq eval -i 'del(.host.priority_class)' cluster-specific-values.yaml
+        yq eval -i 'del(.cluster.priority_class)' cluster-specific-values.yaml
         
         echo "No priority class will be used."
-    fi
+        fi
     echo
 }
 
