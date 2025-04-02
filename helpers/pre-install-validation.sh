@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo -e "Running pre-install validation...\n"
+echo -e "\033[32mRunning pre-install validation...\n\033[0m"
 
 #
 # Check for kubectl binary presence
