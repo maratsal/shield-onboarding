@@ -199,18 +199,18 @@ update_proxy_settings() {
             fi
         done
 
-        # Update the values in the YAML file
-        sed -i "s|http_proxy:.*|http_proxy: \"$HTTP_PROXY\"|" cluster-specific-values.yaml
-        sed -i "s|https_proxy:.*|https_proxy: \"$HTTPS_PROXY\"|" cluster-specific-values.yaml
-        sed -i "s|no_proxy:.*|no_proxy: \"$NO_PROXY\"|" cluster-specific-values.yaml
+        # Update the values in the YAML file using yq
+        yq eval -i "proxy.http_proxy = \"$HTTP_PROXY\"" cluster-specific-values.yaml
+        yq eval -i "proxy.https_proxy = \"$HTTPS_PROXY\"" cluster-specific-values.yaml
+        yq eval -i "proxy.no_proxy = \"$NO_PROXY\"" cluster-specific-values.yaml
 
         echo "Proxy settings have been updated."
-    else
-        # Clear any existing proxy settings
-        sed -i "s|http_proxy:.*|http_proxy:|" cluster-specific-values.yaml
-        sed -i "s|https_proxy:.*|https_proxy:|" cluster-specific-values.yaml
-        sed -i "s|no_proxy:.*|no_proxy:|" cluster-specific-values.yaml
-        
+        else
+        # Clear any existing proxy settings using yq
+        yq eval -i "del(.http_proxy)" cluster-specific-values.yaml
+        yq eval -i "del(.https_proxy)" cluster-specific-values.yaml
+        yq eval -i "del(.no_proxy)" cluster-specific-values.yaml
+
         echo "No proxy will be used."
     fi
     echo
@@ -240,7 +240,7 @@ update_namespace() {
 
 confirm_values() {
     echo "Contents of cluster-specific-values.yaml:"
-    yq cluster-specific-values.yaml
+    yq eval cluster-specific-values.yaml
     echo
     echo
     echo -e "\033[1;33mInstallation Namespace: $NAMESPACE\033[0m"
