@@ -65,8 +65,8 @@ update_cluster_name() {
         read -p "Enter the new cluster name: " NEW_CLUSTER_NAME
 
         # Update both occurrences in the YAML file - the name and the tag
-        sed -i "s/name: \"$CURRENT_CLUSTER_NAME\"/name: \"$NEW_CLUSTER_NAME\"/" cluster-specific-values.yaml
-        sed -i "s/cluster: \"$CURRENT_CLUSTER_NAME\"/cluster: \"$NEW_CLUSTER_NAME\"/" cluster-specific-values.yaml
+        sed -i "s/name: $CURRENT_CLUSTER_NAME/name: \"$NEW_CLUSTER_NAME\"/" cluster-specific-values.yaml
+        sed -i "s/cluster: $CURRENT_CLUSTER_NAME/cluster: \"$NEW_CLUSTER_NAME\"/" cluster-specific-values.yaml
 
         echo "Cluster name has been updated to: $NEW_CLUSTER_NAME"
     else
@@ -78,12 +78,12 @@ update_cluster_name() {
 
 update_sysdig_accesskey() {
     # Prompt the user to specify the Sysdig access key
-    read -p "Enter the Sysdig access key: " SYSDIG_ACCESS_KEY
+    read -p "Enter the Sysdig agent access key: " SYSDIG_ACCESS_KEY
 
     # Keep asking for the access key until it is not empty
     while [[ -z "$SYSDIG_ACCESS_KEY" ]]; do
-        echo "Error: Sysdig access key must be specified."
-        read -p "Enter the Sysdig access key: " SYSDIG_ACCESS_KEY
+        echo "Error: Sysdig agent access key must be specified."
+        read -p "Enter the Sysdig agent access key: " SYSDIG_ACCESS_KEY
     done
     echo
 }
