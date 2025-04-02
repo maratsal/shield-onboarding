@@ -1,3 +1,5 @@
+# Shield Chart: 0.10.0
+# OCI Registry: jfrog.idonthaveany.boats
 cluster_config:
   # REQUIRED - The name of the cluster
   name: "abcd-prod-local"

@@ -17,6 +17,21 @@ if [ $? -ne 0 ]; then
     fi
 fi
 
+# Extract values from cluster-specific-values.yaml
+SHIELD_CHART_VERSION=$(grep '# Shield Chart:' cluster-specific-values.yaml | awk '{print $3}')
+REGISTRY=$(grep '# OCI Registry:' cluster-specific-values.yaml | awk '{print $3}')
+
+# Check if the values exist, if not, error out
+if [[ -z "$SHIELD_CHART_VERSION" ]]; then
+    echo "Error: Shield Chart version not found in cluster-specific-values.yaml"
+    exit 1
+fi
+
+if [[ -z "$REGISTRY" ]]; then
+    echo "Error: OCI Registry not found in cluster-specific-values.yaml"
+    exit 1
+fi
+
 # Check to see if the user wants to answer or if they've already filled out the cluster-specific-values.yaml manually
 read -p "Have you already updated the cluster-specific-values.yaml file? (yes/no): " UPDATE_FILE
 
@@ -46,8 +61,6 @@ update_namespace
 confirm_values
 
 # Logon to OCI Registry that contains our shield charts
-REGISTRY="jfrog.idonthaveany.boats"
-SHIELD_CHART_VERSION=0.10.0
 echo "Logging into OCI Registry: $REGISTRY"
 helm registry login $REGISTRY
 

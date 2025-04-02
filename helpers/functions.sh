@@ -157,8 +157,8 @@ confirm_values() {
     awk '{print "\033[1;33m" $0 "\033[0m"}' cluster-specific-values.yaml
     echo
     echo
-    echo "Namespace: $NAMESPACE"
-    echo "${SYSDIG_ACCESS_KEY:0:6}******${SYSDIG_ACCESS_KEY: -6}"
+    echo -e "\033[1;33mInstallation Namespace: $NAMESPACE\033[0m"
+    echo -e "\033[1;33mInstallation Access Key: ${SYSDIG_ACCESS_KEY:0:6}******${SYSDIG_ACCESS_KEY: -6}\033[0m"
     echo
     read -p "Do you want to proceed with these values? (yes/no): " PROCEED
 
@@ -171,7 +171,7 @@ confirm_values() {
 }
 
 update_priority_class() {
-    read -p "Do you want to specify a kubernetes priority class? (yes/no): " USE_PRIORITY_CLASS
+    read -p "Do you want to specify a Kubernetes priority class? (yes/no): " USE_PRIORITY_CLASS
     
     if [[ "$USE_PRIORITY_CLASS" == "yes" ]]; then
         # Default value suggestion
