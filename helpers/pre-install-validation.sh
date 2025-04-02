@@ -10,8 +10,10 @@ if ! command -v yq &> /dev/null; then
   arch=$(uname -m)
   if [[ "$arch" == "x86_64" ]]; then
     alias yq=./helpers/yq_linux_amd64
+    echo -e "\033[32myq is installed.\033[0m"
   elif [[ "$arch" == "aarch64" ]]; then
     alias yq=./helpers/yq_linux_arm64
+    echo -e "\033[32myq is installed.\033[0m"
   else
     echo -e "\033[31mUnsupported platform type: $arch. Please install yq manually.\033[0m"
     exit 1
