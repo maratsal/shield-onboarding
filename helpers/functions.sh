@@ -126,7 +126,7 @@ update_proxy_settings() {
 
         # Get HTTPS proxy
         while true; do
-            read -p "Enter HTTPS proxy URL (format: http://proxy.local:9999): " HTTPS_PROXY
+            read -p "Enter HTTPS proxy URL (format: http://proxy.local:9999): " -e -i $HTTP_PROXY HTTPS_PROXY
             if [[ "$HTTPS_PROXY" =~ ^https?://[a-zA-Z0-9.-]+(:[0-9]+)?$ ]]; then
             break
             else
