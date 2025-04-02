@@ -26,6 +26,7 @@ update_vz_vsadid() {
         sed -i "s/vz-vsadid: .*/vz-vsadid: \"$NEW_VZ_VSADID\"/" cluster-specific-values.yaml
 
         echo "'vz-vsadid' has been updated to: $NEW_VZ_VSADID"
+        CURRENT_VZ_VSADID=$NEW_VZ_VSADID
     else
         echo "No changes made to 'vz-vsadid'."
     fi
@@ -58,6 +59,7 @@ update_vz_vastid() {
         sed -i "s/vz-vastid: .*/vz-vastid: \"$NEW_VZ_VASTID\"/" cluster-specific-values.yaml
 
         echo "'vz-vastid' has been updated to: $NEW_VZ_VASTID"
+        CURRENT_VZ_VASTID=$NEW_VZ_VASTID
     else
         echo "No changes made to 'vz-vastid'."
     fi
@@ -83,7 +85,42 @@ update_cluster_name() {
     fi
 
     if [[ "$RESPONSE" == "yes" ]]; then
-        read -p "Enter the new cluster name: " NEW_CLUSTER_NAME
+        while true; do
+            read -p "Enter Business Unit Name: " BUSINESS_UNIT
+
+            # Validate Business Unit name: must be 1-63 characters, lowercase, alphanumeric, or '-' and must start/end with alphanumeric
+            if [[ "$BUSINESS_UNIT" =~ ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$ ]] && [[ ${#BUSINESS_UNIT} -le 63 ]]; then
+                break
+            else
+                echo "Invalid Business Unit name. It must be 1-63 characters long, contain only lowercase letters, numbers, or '-', and start/end with an alphanumeric character."
+            fi
+        done
+
+        while true; do
+            read -p "Enter the environment (allowed values: test, dev, qa, stg, preprod, prod): " ENVIRONMENT
+
+            # Validate the environment input
+            if [[ "$ENVIRONMENT" =~ ^(test|dev|qa|stg|preprod|prod)$ ]]; then
+            break
+            else
+            echo "Invalid environment. Please enter one of the allowed values: test, dev, qa, stg, preprod, prod."
+            fi
+        done
+
+        # Get environment
+        node_labels=$(kubectl get nodes -o jsonpath='{.items[0].metadata.labels}' 2>/dev/null)
+        
+        if [[ "$node_labels" == *"eks.amazonaws.com"* || "$node_labels" == *"instance-type"* ]]; then
+            PLATFORM="eks"
+        elif [[ "$node_labels" == *"openshift"* ]]; then
+            PLATFORM="ocp"
+        elif [[ "$node_labels" == *"cloud.google.com/gke-nodepool"* ]]; then
+            PLATFORM="gke"
+        else
+            PLATFORM="oss"
+        fi
+
+        read -p "Enter the new cluster name: " -e -i $BUSINESS_UNIT-$PLATFORM-$ENVIRONMENT-$CURRENT_VZ_VASTID-$CURRENT_VZ_VSADID NEW_CLUSTER_NAME
 
         # Update both occurrences in the YAML file - the name and the tag
         sed -i "s/name: $CURRENT_CLUSTER_NAME/name: \"$NEW_CLUSTER_NAME\"/" cluster-specific-values.yaml

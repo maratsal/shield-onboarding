@@ -42,9 +42,9 @@ fi
 # If change_me is present in cluster-specific-values.yaml assume they need to be prompted to update the values
 if grep -q "CHANGE_ME" cluster-specific-values.yaml; then
     update_sysdig_accesskey  # Get Access Key and Set as Variable
-    update_cluster_name      # Get Cluster Name and Update Values
-    update_vz_vsadid         # Get vz-vsadid and Update Values   
     update_vz_vastid         # Get vz-vastid and Update Values
+    update_vz_vsadid         # Get vz-vsadid and Update Values   
+    update_cluster_name      # Get Cluster Name and Update Values
     update_proxy_settings    # Get Proxy Settings and Update Values
     update_priority_class    # Get Priority Class and Update Values
 else
