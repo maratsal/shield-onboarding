@@ -32,7 +32,6 @@ update_vz_vsadid() {
     fi
     echo
 }
-
 update_vz_vastid() {
     # Extract the current value of "vz-vastid" from the YAML file
     CURRENT_VZ_VASTID=$(grep 'vz-vastid:' cluster-specific-values.yaml | awk '{print $2}')
@@ -141,8 +140,6 @@ update_cluster_name() {
     fi
     echo
 }
-
-
 update_sysdig_accesskey() {
     # Prompt the user to specify the Sysdig access key
     while true; do
@@ -163,7 +160,6 @@ update_sysdig_accesskey() {
     done
     echo
 }
-
 update_proxy_settings() {
     # Ask if proxy is required
     while true; do
@@ -220,7 +216,6 @@ update_proxy_settings() {
     fi
     echo
 }
-
 update_namespace() {
     # Prompt the user to specify the namespace
     while true; do
@@ -242,7 +237,6 @@ update_namespace() {
     echo "Sysdig will be installed in the namespace: $NAMESPACE"
     echo
 }
-
 confirm_values() {
     echo "Contents of cluster-specific-values.yaml:"
     yq eval cluster-specific-values.yaml
@@ -267,7 +261,6 @@ confirm_values() {
 
     echo
 }
-
 update_priority_class() {
     while true; do
         read -p "Do you want to specify a Kubernetes priority class? (yes/no): " USE_PRIORITY_CLASS
@@ -299,26 +292,28 @@ update_priority_class() {
         fi
     echo
 }
-
 update_resource_sizing() {
     # Determine the cluster size based on the number of nodes
     NODE_COUNT=$(kubectl get nodes --no-headers | wc -l)
 
+    # TODO Sizing
     if [[ "$NODE_COUNT" -lt 2 ]]; then
         # Path to the YAML file
         YAML_FILE="cluster-specific-values.yaml"
 
         # Check if the 'host.resources.shield' section exists, if not, add it
-        if ! yq eval '.host.resources.shield' "$YAML_FILE" &>/dev/null; then
+        yq eval '.host.resources.shield' "$YAML_FILE" -e &>/dev/null
+        if [[ $? -ne 0 ]]; then
             yq eval -i '.host.resources.shield = {"requests": {"cpu": "100m", "memory": "256Mi"}, "limits": {"cpu": "500m", "memory": "1024Mi"}}' "$YAML_FILE"
         fi
 
         # Check if the 'cluster.resources' section exists, if not, add it
-        if ! yq eval '.cluster.resources' "$YAML_FILE" &>/dev/null; then
+        yq eval '.cluster.resources' "$YAML_FILE" -e &>/dev/null
+        if [[ $? -ne 0 ]]; then
             yq eval -i '.cluster.resources = {"requests": {"cpu": "100m", "memory": "256Mi"}, "limits": {"cpu": "1000m", "memory": "2048Mi"}}' "$YAML_FILE"
         fi
         
     elif [[ "$NODE_COUNT" -gt 12 ]]; then
-        echo "Large cluster"
+        echo "TODO - Large cluster"
     fi
 }
