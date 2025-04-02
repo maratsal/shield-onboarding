@@ -1,7 +1,5 @@
 #!/bin/bash
 
-echo -e "\033[32mRunning pre-install validation...\033[0m"
-
 #
 # Check for kubectl or oc binary presence
 #

@@ -3,6 +3,8 @@
 # Source functions used by this script
 source ./helpers/functions.sh
 
+echo -e "\033[32mRunning pre-install validation...\033[0m"
+
 #
 # check for yq already installed or use bundled arm/amd binaries with alias
 #
