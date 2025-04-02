@@ -9,7 +9,7 @@ chmod +x ./helpers/pre-install-validation.sh
 
 # Check the exit code of pre-install-validation.sh
 if [ $? -ne 0 ]; then
-    echo "Pre-install validation FAILED."
+    echo -e "\e[31mPre-install validation FAILED.\e[0m"
     read -p "Do you still want to continue with the installation? (yes/no): " CONTINUE_AFTER_FAILURE
     if [[ "$CONTINUE_AFTER_FAILURE" != "yes" ]]; then
         echo "Installation aborted by the user due to pre-install validation failure."

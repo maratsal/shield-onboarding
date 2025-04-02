@@ -82,14 +82,35 @@ update_proxy_settings() {
 
     if [[ "$PROXY_REQUIRED" == "yes" ]]; then
         # Get HTTP proxy
-        read -p "Enter HTTP proxy URL (format: http://proxy.local:9999): " HTTP_PROXY
-        
+        while true; do
+            read -p "Enter HTTP proxy URL (format: http://proxy.local:9999): " HTTP_PROXY
+            if [[ "$HTTP_PROXY" =~ ^https?://[a-zA-Z0-9.-]+(:[0-9]+)?$ ]]; then
+            break
+            else
+            echo "Invalid URL. Please enter a valid HTTP proxy URL (format: http://proxy.local:9999 or https://proxy.local:9999)."
+            fi
+        done
+
         # Get HTTPS proxy
-        read -p "Enter HTTPS proxy URL (format: http://proxy.local:9999): " HTTPS_PROXY
-        
+        while true; do
+            read -p "Enter HTTPS proxy URL (format: http://proxy.local:9999): " HTTPS_PROXY
+            if [[ "$HTTPS_PROXY" =~ ^https?://[a-zA-Z0-9.-]+(:[0-9]+)?$ ]]; then
+            break
+            else
+            echo "Invalid URL. Please enter a valid HTTPS proxy URL (format: http://proxy.local:9999 or https://proxy.local:9999)."
+            fi
+        done
+
         # Get no_proxy list
         echo "Enter hosts/IPs to exclude from proxy (comma-separated, leave empty if none)"
-        read -p "Example: localhost,127.0.0.1,10.0.0.0/8: " NO_PROXY
+        while true; do
+            read -p "Example: localhost,127.0.0.1,10.0.0.0/8: " NO_PROXY
+            if [[ "$NO_PROXY" =~ ^([a-zA-Z0-9.-]+|[0-9]{1,3}(\.[0-9]{1,3}){3}(/[0-9]{1,2})?)(,([a-zA-Z0-9.-]+|[0-9]{1,3}(\.[0-9]{1,3}){3}(/[0-9]{1,2})?))*$ ]]; then
+            break
+            else
+            echo "Invalid format. Please enter a valid comma-separated list of hostnames, IP addresses, or CIDR blocks."
+            fi
+        done
 
         # Update the values in the YAML file
         sed -i "s|http_proxy:.*|http_proxy: \"$HTTP_PROXY\"|" cluster-specific-values.yaml
@@ -110,12 +131,21 @@ update_proxy_settings() {
 
 update_namespace() {
     # Prompt the user to specify the namespace
-    read -p "Enter the namespace where you want to install Sysdig (default: sysdig): " NAMESPACE
+    while true; do
+        read -p "Enter the namespace where you want to install Sysdig (default: sysdig): " NAMESPACE
 
-    # Use "sysdig" as the default namespace if none is provided
-    if [[ -z "$NAMESPACE" ]]; then
-        NAMESPACE="sysdig"
-    fi
+        # Use "sysdig" as the default namespace if none is provided
+        if [[ -z "$NAMESPACE" ]]; then
+            NAMESPACE="sysdig"
+        fi
+
+        # Validate namespace: must be 1-63 characters, lowercase, alphanumeric, or '-' and must start/end with alphanumeric
+        if [[ "$NAMESPACE" =~ ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$ ]] && [[ ${#NAMESPACE} -le 63 ]]; then
+            break
+        else
+            echo "Invalid namespace. It must be 1-63 characters long, contain only lowercase letters, numbers, or '-', and start/end with an alphanumeric character."
+        fi
+    done
 
     echo "Sysdig will be installed in the namespace: $NAMESPACE"
     echo

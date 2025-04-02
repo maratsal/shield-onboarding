@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo -e "Running pre-install validation script...\n"
+
 #
 # Check for kubectl binary presence
 #
@@ -12,7 +14,7 @@ fi
 
 # Check for previous sysdig install and require uninstallation first if present
 if kubectl get all --all-namespaces --show-labels | grep -q "sysdig/"; then
-  echo -e "\033[31mSysdig components are already installed. Please remove them before proceeding.\033[0m"
+  echo -e "\033[31mSysdig components detected. Please remove them before proceeding.\033[0m"
   exit 1
 else
   echo -e "\033[32mNo existing Sysdig components found. Proceeding with installation.\033[0m"
@@ -40,8 +42,7 @@ fi
 # Kubernetes Current Context Verification
 #
 current_context=$(kubectl config current-context)
-echo -e "\033[33mAre you logged into the correct cluster $current_context? (yes/no)\033[0m"
-read -r response
+read -r -p $'Are you logged into the correct cluster '"$current_context"' (yes/no)? ' response
 if [[ "$response" != "yes" ]]; then
   echo -e "\033[31mExiting. Please log into the correct cluster and try again.\033[0m"
   exit 1
@@ -79,12 +80,14 @@ done
 #
 # Validated resources
 #
-echo -e "\033[33mAre there enough resources available on the cluster?\033[0m"
+echo
+echo -e "\033[33mACheck resource availability:\033[0m"
 nodes=$(kubectl get nodes -o custom-columns=":.metadata.name")
 for node in $nodes; do
   echo "Node: $node"
   kubectl describe node $node | grep --color=never -i "Allocated resources" -A 8
 done
+echo -e "\033[33mAre there enough resources available on the cluster nodes (yes/no)?\033[0m"
 read -r response
 if [[ "$response" != "yes" ]]; then
   echo -e "\033[31mExiting. Please reallocate resources and try again.\033[0m"
