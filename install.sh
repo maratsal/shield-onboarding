@@ -60,8 +60,22 @@ if [[ -z "$REGISTRY" ]]; then
     exit 1
 fi
 
-# If change_me is present in cluster-specific-values.yaml assume they need to be prompted to update the values
+
+# Assume if change_me is in the file they need to update values so dont prompt
 if grep -q "CHANGE_ME" cluster-specific-values.yaml; then
+ UPDATE_VALUES = 'yes'
+else
+    while true; do
+        read -p "Do you want to update the values in cluster-specific-values.yaml? (yes/no): " UPDATE_VALUES
+        if [[ "$UPDATE_VALUES" == "yes" || "$UPDATE_VALUES" == "no" ]]; then
+            break
+        else
+            echo "Please enter 'yes' or 'no'."
+        fi
+    done
+fi
+
+if [[ "$UPDATE_VALUES" == "yes" ]]; then
     update_sysdig_accesskey  # Get Access Key and Set as Variable
     update_vz_vastid         # Get vz-vastid and Update Values
     update_vz_vsadid         # Get vz-vsadid and Update Values   
@@ -70,7 +84,7 @@ if grep -q "CHANGE_ME" cluster-specific-values.yaml; then
     update_priority_class    # Get Priority Class and Update Values
     update_resource_sizing   # Get Resource Sizing and Update Values
 else
-    echo "Skipping updates to cluster-specific-values.yaml as it was already updated manually."
+    echo "Skipping updates to cluster-specific-values.yaml per user."
     echo
 fi
 
