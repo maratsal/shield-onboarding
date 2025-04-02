@@ -63,7 +63,7 @@ fi
 
 # Assume if change_me is in the file they need to update values so dont prompt
 if grep -q "CHANGE_ME" cluster-specific-values.yaml; then
- UPDATE_VALUES = 'yes'
+ UPDATE_VALUES='yes'
 else
     while true; do
         read -p "Do you want to update the values in cluster-specific-values.yaml? (yes/no): " UPDATE_VALUES
