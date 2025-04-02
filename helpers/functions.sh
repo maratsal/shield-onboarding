@@ -304,13 +304,13 @@ update_resource_sizing() {
         # Check if the 'host.resources.shield' section exists, if not, add it
         yq eval '.host.resources.shield' "$YAML_FILE" -e &>/dev/null
         if [[ $? -ne 0 ]]; then
-            yq eval -i '.host.resources.shield = {"requests": {"cpu": "100m", "memory": "256Mi"}, "limits": {"cpu": "500m", "memory": "1024Mi"}}' "$YAML_FILE"
+            yq eval -i --prettyPrint '.host.resources.shield = {"requests": {"cpu": "100m", "memory": "256Mi"}, "limits": {"cpu": "500m", "memory": "1024Mi"}}' "$YAML_FILE"
         fi
 
         # Check if the 'cluster.resources' section exists, if not, add it
         yq eval '.cluster.resources' "$YAML_FILE" -e &>/dev/null
         if [[ $? -ne 0 ]]; then
-            yq eval -i '.cluster.resources = {"requests": {"cpu": "100m", "memory": "256Mi"}, "limits": {"cpu": "1000m", "memory": "2048Mi"}}' "$YAML_FILE"
+            yq eval -i --prettyPrint '.cluster.resources = {"requests": {"cpu": "100m", "memory": "256Mi"}, "limits": {"cpu": "1000m", "memory": "2048Mi"}}' "$YAML_FILE"
         fi
         
     elif [[ "$NODE_COUNT" -gt 12 ]]; then
