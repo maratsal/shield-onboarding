@@ -294,13 +294,11 @@ update_priority_class() {
         
         # Update both priority class name entries in the YAML file using yq
         yq eval -i '.host.priority_class.name = "'"$PRIORITY_CLASS_NAME"'"' cluster-specific-values.yaml
-        yq eval -i '.cluster.priority_class.name = "'"$PRIORITY_CLASS_NAME"'"' cluster-specific-values.yaml
         
-        echo "Priority class set to: $PRIORITY_CLASS_NAME for both host and cluster components."
+        echo "Priority class set to: $PRIORITY_CLASS_NAME for host components."
         else
         # Clear any existing priority class settings using yq
         yq eval -i 'del(.host.priority_class)' cluster-specific-values.yaml
-        yq eval -i 'del(.cluster.priority_class)' cluster-specific-values.yaml
         
         echo "No priority class will be used."
         fi

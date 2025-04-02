@@ -19,9 +19,6 @@ host:
     name:
 
 cluster:
-  priority_class:
-    # OPTIONAL - The name of the priority class, typically system-node-critical
-    name:
 
 proxy:
   # OPTIONAL - HTTP proxy to use for all HTTP requests
