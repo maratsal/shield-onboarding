@@ -23,7 +23,7 @@ update_vz_vsadid() {
         read -p "Enter the new value for 'vz-vsadid': " NEW_VZ_VSADID
 
         # Update the value in the YAML file
-        sed -i "s/vz-vsadid: .*/vz-vsadid: \"$NEW_VZ_VSADID\"/" cluster-specific-values.yaml
+        yq eval -i '.cluster_config.tags.vz-vsadid = "'"$NEW_VZ_VSADID"'"' cluster-specific-values.yaml
 
         echo "'vz-vsadid' has been updated to: $NEW_VZ_VSADID"
         CURRENT_VZ_VSADID=$NEW_VZ_VSADID
@@ -56,7 +56,7 @@ update_vz_vastid() {
         read -p "Enter the new value for 'vz-vastid': " NEW_VZ_VASTID
 
         # Update the value in the YAML file
-        sed -i "s/vz-vastid: .*/vz-vastid: \"$NEW_VZ_VASTID\"/" cluster-specific-values.yaml
+        yq eval -i '.cluster_config.tags.vz-vastid = "'"$NEW_VZ_VASTID"'"' cluster-specific-values.yaml
 
         echo "'vz-vastid' has been updated to: $NEW_VZ_VASTID"
         CURRENT_VZ_VASTID=$NEW_VZ_VASTID
@@ -120,11 +120,20 @@ update_cluster_name() {
             PLATFORM="oss"
         fi
 
-        read -p "Enter the new cluster name: " -e -i $BUSINESS_UNIT-$PLATFORM-$ENVIRONMENT-$CURRENT_VZ_VASTID-$CURRENT_VZ_VSADID NEW_CLUSTER_NAME
+        while true; do
+            read -p "Enter the new cluster name: " -e -i $BUSINESS_UNIT-$PLATFORM-$ENVIRONMENT-$CURRENT_VZ_VASTID-$CURRENT_VZ_VSADID NEW_CLUSTER_NAME
+
+            # Validate cluster name: must be 1-253 characters, lowercase, alphanumeric, or '-', and must start/end with alphanumeric
+            if [[ "$NEW_CLUSTER_NAME" =~ ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$ ]] && [[ ${#NEW_CLUSTER_NAME} -le 253 ]]; then
+            break
+            else
+            echo "Invalid cluster name. It must be 1-253 characters long, contain only lowercase letters, numbers, or '-', and start/end with an alphanumeric character."
+            fi
+        done
 
         # Update both occurrences in the YAML file - the name and the tag
-        sed -i "s/name: $CURRENT_CLUSTER_NAME/name: \"$NEW_CLUSTER_NAME\"/" cluster-specific-values.yaml
-        sed -i "s/cluster: $CURRENT_CLUSTER_NAME/cluster: \"$NEW_CLUSTER_NAME\"/" cluster-specific-values.yaml
+        yq eval -i '.cluster_config.name = "'"$NEW_CLUSTER_NAME"'"' cluster-specific-values.yaml
+        yq eval -i '.cluster_config.tags.cluster = "'"$NEW_CLUSTER_NAME"'"' cluster-specific-values.yaml
 
         echo "Cluster name has been updated to: $NEW_CLUSTER_NAME"
     else
