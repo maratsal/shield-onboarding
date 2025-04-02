@@ -136,7 +136,16 @@ update_cluster_name() {
 
 update_sysdig_accesskey() {
     # Prompt the user to specify the Sysdig access key
-    read -p "Enter the Sysdig agent access key: " SYSDIG_ACCESS_KEY
+    while true; do
+        read -p "Enter the Sysdig agent access key: " SYSDIG_ACCESS_KEY
+
+        # Validate the access key format (UUID format)
+        if [[ "$SYSDIG_ACCESS_KEY" =~ ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$ ]]; then
+            break
+        else
+            echo "Invalid access key format. Please enter a valid access key"
+        fi
+    done
 
     # Keep asking for the access key until it is not empty
     while [[ -z "$SYSDIG_ACCESS_KEY" ]]; do

@@ -4,7 +4,7 @@ echo -e "\033[32mRunning pre-install validation...\n\033[0m"
 
 
 #
-# yq alias
+# check for yq already installed or use bundled arm/amd binaries with alias
 #
 if ! command -v yq &> /dev/null; then
   arch=$(uname -m)
