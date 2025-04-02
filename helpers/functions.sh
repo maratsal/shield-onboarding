@@ -51,7 +51,7 @@ update_vz_vastid() {
 }
 update_cluster_name() {
     # Extract the current value of cluster name from the YAML file
-    CURRENT_CLUSTER_NAME=$(grep 'name:' cluster-specific-values.yaml | head -1 | awk '{print $2}' | tr -d '"')
+    CURRENT_CLUSTER_NAME=$(grep 'name:' cluster-specific-values.yaml | head -1 | awk '{print $2}')
 
     # Display the current value to the user and ask if they want to change it
     if [[ "$CURRENT_CLUSTER_NAME" == "\"CHANGE_ME\"" ]]; then
