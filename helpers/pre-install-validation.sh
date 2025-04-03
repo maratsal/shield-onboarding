@@ -1,5 +1,23 @@
 #!/bin/bash
 
+#
+# Check for kubectl or oc binary presence
+#
+if ! command -v kubectl &> /dev/null; then
+  if command -v oc &> /dev/null; then
+    echo -e "\033[33mkubectl is not installed, but oc is available. Creating an alias for kubectl as oc.\033[0m"
+    kubectl() {
+      # Call 'oc' with the same arguments passed to 'kubectl'
+      command oc "$@"
+    }
+  else
+    echo -e "\033[31mkubectl or oc is not installed or not in PATH. Please install kubectl or oc before proceeding.\033[0m"
+    exit 1
+  fi
+else
+  echo -e "\033[32mkubectl is installed.\033[0m"
+fi
+
 # Check for previous sysdig install and require uninstallation first if present
 if kubectl get all --all-namespaces --show-labels | grep -q "sysdig/"; then
   echo -e "\033[31mSysdig components detected. Please remove them before proceeding.\033[0m"
