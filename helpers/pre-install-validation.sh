@@ -132,7 +132,7 @@ while true; do
     fi
 done
 
-if [[ "$response" != "yes" ]]; then
+if [[ "$RESPONSE" != "yes" ]]; then
   echo -e "\033[31mExiting. Please reallocate resources and try again.\033[0m"
   exit 1
 fi
