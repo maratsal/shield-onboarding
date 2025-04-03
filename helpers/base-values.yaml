@@ -55,16 +55,16 @@ features:
 
   posture:
     host_posture:
-      enabled: false
+      enabled: true
     cluster_posture:
       # Enable the posture feature on cluster shield
-      enabled: false
+      enabled: true
   vulnerability_management:
     host_vulnerability_management:
-      enabled: false
+      enabled: true
     container_vulnerability_management:
       # Enable the container vulnerability management feature on cluster shield
-      enabled: false
+      enabled: true
       local_cluster:
         # Restrict access to specific Docker secrets when Cluster Scanner is running.
         # The default behavior is listing all secrets.
@@ -85,16 +85,16 @@ features:
         verify: true
     in_use:
       # Allows to retrieve the list of running packages.
-      enabled: false
+      enabled: true
       # Allows to store the list of running packages to Sysdig backend.
       integration_enabled: false
   detections:
     drift_control:
-      enabled: false
+      enabled: true
     malware_control:
-      enabled: false
+      enabled: true
     ml_policies:
-      enabled: false
+      enabled: true
     kubernetes_audit:
       # Enable the Kubernetes Audit feature on cluster shield
       enabled: false
@@ -370,7 +370,7 @@ cluster:
     # The repository where the cluster shield image is stored
     repository: sysdig/cluster-shield
     # The tag for the cluster shield image
-    tag: 1.9.1
+    tag: 1.10.0-rc3
     # The pull policy for the cluster shield image
     pull_policy: IfNotPresent
     # The pull secrets for the cluster shield image
