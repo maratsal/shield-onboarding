@@ -35,7 +35,16 @@ update_vz_vsadid() {
     fi
 
     if [[ "$RESPONSE" == "yes" ]]; then
-        read -p "Enter the new value for 'vz-vsadid': " NEW_VZ_VSADID
+        while true; do
+            read -p "Enter the new value for 'vz-vsadid' (only lowercase letters and numbers, max length 10): " NEW_VZ_VSADID
+
+            # Validate the input: only lowercase letters and numbers, max length 10
+            if [[ "$NEW_VZ_VSADID" =~ ^[a-z0-9]{1,10}$ ]]; then
+                break
+            else
+                echo "Invalid input. Please enter only lowercase letters and numbers with a maximum length of 10."
+            fi
+        done
 
         # Update the value in the YAML file
         yq eval -i '.cluster_config.tags.vz-vsadid = "'"$NEW_VZ_VSADID"'"' cluster-specific-values.yaml
@@ -65,16 +74,25 @@ update_vz_vastid() {
         done
     fi
 
-    if [[ "$RESPONSE" == "yes" ]]; then
-        read -p "Enter the new value for 'vz-vastid': " NEW_VZ_VASTID
+        if [[ "$RESPONSE" == "yes" ]]; then
+            while true; do
+                read -p "Enter the new value for 'vz-vastid' (only lowercase letters and numbers, max length 10): " NEW_VZ_VASTID
 
-        # Update the value in the YAML file
-        yq eval -i '.cluster_config.tags.vz-vastid = "'"$NEW_VZ_VASTID"'"' cluster-specific-values.yaml
+                # Validate the input: only lowercase letters and numbers, max length 10
+                if [[ "$NEW_VZ_VASTID" =~ ^[a-z0-9]{1,10}$ ]]; then
+                    break
+                else
+                    echo "Invalid input. Please enter only lowercase letters and numbers with a maximum length of 10."
+                fi
+            done
 
-        CURRENT_VZ_VASTID=$NEW_VZ_VASTID
-    else
-        echo "No changes made to 'vz-vastid'."
-    fi
+            # Update the value in the YAML file
+            yq eval -i '.cluster_config.tags.vz-vastid = "'"$NEW_VZ_VASTID"'"' cluster-specific-values.yaml
+
+            CURRENT_VZ_VASTID=$NEW_VZ_VASTID
+        else
+            echo "No changes made to 'vz-vastid'."
+        fi
     echo
 }
 update_cluster_name() {
