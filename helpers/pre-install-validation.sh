@@ -6,7 +6,10 @@
 if ! command -v kubectl &> /dev/null; then
   if command -v oc &> /dev/null; then
     echo -e "\033[33mkubectl is not installed, but oc is available. Creating an alias for kubectl as oc.\033[0m"
-    alias kubectl=oc
+    kubectl() {
+      # Call 'oc' with the same arguments passed to 'kubectl'
+      command oc "$@"
+    }
   else
     echo -e "\033[31mkubectl or oc is not installed or not in PATH. Please install kubectl or oc before proceeding.\033[0m"
     exit 1
