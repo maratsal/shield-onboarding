@@ -4,54 +4,53 @@ profiles:
       resources:
         shield:
           requests:
-            cpu: "100m"
+            cpu: "250m"
             memory: "256Mi"
           limits:
-            cpu: "500m"
-            memory: "1024Mi"
+            cpu: "750m"
+            memory: "750Mi"
     cluster:
       resources:
         requests:
-          cpu: "100m"
-          memory: "256Mi"
+          cpu: "500m"
+          memory: "512Mi"
         limits:
-          cpu: "1000m"
-          memory: "2048Mi"
+          cpu: "1500m"
+          memory: "1536Mi"
 
   medium:
     host:
       resources:
         shield:
           requests:
-            cpu: "200m"
-            memory: "512Mi"
+            cpu: "250m"
+            memory: "384Mi"
           limits:
             cpu: "1000m"
-            memory: "2048Mi"
+            memory: "1Gi"
     cluster:
       resources:
         requests:
-          cpu: "200m"
+          cpu: "500m"
           memory: "512Mi"
         limits:
-          cpu: "2000m"
-          memory: "4096Mi"
-
+          cpu: "1500m"
+          memory: "1536Mi"
   large:
     host:
       resources:
         shield:
           requests:
-            cpu: "500m"
-            memory: "1024Mi"
+            cpu: "350m"
+            memory: "512Mi"
           limits:
-            cpu: "2000m"
-            memory: "4096Mi"
+            cpu: "1500m"
+            memory: "1536Mi"
     cluster:
       resources:
         requests:
-          cpu: "500m"
-          memory: "1024Mi"
+          cpu: "750m"
+          memory: "768Mi"
         limits:
-          cpu: "4000m"
-          memory: "8192Mi"
+          cpu: "1500m"
+          memory: "2Gi"
