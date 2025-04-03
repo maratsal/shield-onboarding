@@ -93,8 +93,6 @@ done
 #
 # Validate node resources
 #
-cpu_threshold=1500
-memory_threshold=512000
 
 # Fetch node info and display memory/cpu allocatable
 kubectl get nodes -o custom-columns=":.metadata.name,:.status.allocatable.cpu,:.status.allocatable.memory" | while read -r node cpu memory; do
@@ -103,24 +101,10 @@ kubectl get nodes -o custom-columns=":.metadata.name,:.status.allocatable.cpu,:.
         continue
     fi
 
-    # Extract CPU value in m (remove 'm' suffix)
-    cpu_value=$(echo "$cpu" | sed 's/m//')
-    
-    # Extract memory value
-    memory_value=$(echo "$memory" | sed 's/Ki//')
-    
-    # Check if CPU or memory is below threshold
-    if [[ "$cpu_value" -lt $cpu_threshold || "$memory_value" -lt $memory_threshold ]]; then
-      echo -e "\033[33mNode $node has less than the threshold:\033[0m"
-      echo -e "\033[33m  CPU Allocatable: $cpu\033[0m"
-      echo -e "\033[33m  Memory Allocatable: $memory\033[0m"
-      echo
-    else
-      echo -e "\033[32mNode $node meets the threshold:\033[0m"
+      echo -e "\033[32mNode $node:\033[0m"
       echo -e "\033[32m  CPU Allocatable: $cpu\033[0m"
       echo -e "\033[32m  Memory Allocatable: $memory\033[0m"
       echo
-    fi
 done
 
 while true; do
