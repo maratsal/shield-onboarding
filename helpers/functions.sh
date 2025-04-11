@@ -194,7 +194,7 @@ update_sysdig_accesskey() {
 update_proxy_settings() {
     # Ask if proxy is required
     while true; do
-        read -p "Do you require a proxy for network connections? (yes/no): " PROXY_REQUIRED
+        read -p "Does your kubernetes cluster require a proxy for internet connectivity? (yes/no): " PROXY_REQUIRED
         if [[ "$PROXY_REQUIRED" == "yes" || "$PROXY_REQUIRED" == "no" ]]; then
             break
         else
