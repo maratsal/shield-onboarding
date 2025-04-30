@@ -49,19 +49,12 @@ fi
 
 # Extract values from cluster-specific-values.yaml
 SHIELD_CHART_VERSION=$(grep '# Shield Chart:' cluster-specific-values.yaml | awk '{print $4}')
-REGISTRY=$(grep '# OCI Registry:' cluster-specific-values.yaml | awk '{print $4}')
 
 # Check if the values exist, if not, error out
 if [[ -z "$SHIELD_CHART_VERSION" ]]; then
     echo "Error: Shield Chart version not found in cluster-specific-values.yaml"
     exit 1
 fi
-
-if [[ -z "$REGISTRY" ]]; then
-    echo "Error: OCI Registry not found in cluster-specific-values.yaml"
-    exit 1
-fi
-
 
 # Assume if change_me is in the file they need to update values so dont prompt
 if grep -q "CHANGE_ME" cluster-specific-values.yaml; then
@@ -103,26 +96,13 @@ update_namespace
 # Call the function to confirm values
 confirm_values
 
-# Logon to OCI Registry that contains our shield charts
-echo "Logging into OCI Registry: $REGISTRY"
-helm registry login $REGISTRY
-
-# Check if the login command was successful (return code 0)
-if [ $? -ne 0 ]; then
-  echo "Error: Helm registry login failed."
-  exit 1
-fi
-
-
 # Start Sysdig Install
 helm upgrade --install --create-namespace \
     -n $NAMESPACE \
     -f ./helpers/base-values.yaml -f cluster-specific-values.yaml  \
     --set sysdig_endpoint.access_key=$SYSDIG_ACCESS_KEY \
     shield \
-    oci://$REGISTRY/sysdigcharts/shield\
-    --version $SHIELD_CHART_VERSION
-
+    $SHIELD_CHART_VERSION
 
 # Run post-install validation
 echo
@@ -130,21 +110,3 @@ echo "Sleeping for 5 minutes to allow for pods to start..."
 sleep 300
 chmod +x ./helpers/post-install-validation.sh
 ./helpers/post-install-validation.sh $NAMESPACE
-
-# Commit configuration to git
-
-# Read cluster name from cluster-specific-values.yaml and save it as a variable
-CLUSTER_NAME=$(grep 'name:' cluster-specific-values.yaml | head -1 | awk '{print $2}' | tr -d '"')
-
-if [[ -z "$CLUSTER_NAME" ]]; then
-    echo "Error: Unable to find cluster name"
-    exit 1
-fi
-
-echo 
-echo "Committing changes to Git repository..."
-git checkout -b $CLUSTER_NAME
-git add .
-git commit -m "Commiting config for $CLUSTER_NAME on $(date +%Y-%m-%d)"
-git push -u origin $CLUSTER_NAME
-
