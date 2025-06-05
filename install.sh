@@ -101,7 +101,7 @@ helm upgrade --install --create-namespace \
     -n $NAMESPACE \
     -f ./helpers/base-values.yaml -f cluster-specific-values.yaml  \
     --set sysdig_endpoint.access_key=$SYSDIG_ACCESS_KEY \
-    shield \
+    sysdig-shield \
     $SHIELD_CHART_VERSION
 
 # Run post-install validation
