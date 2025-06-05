@@ -12,7 +12,7 @@ cluster_config:
 
 sysdig_endpoint:
   # The region where the Sysdig Secure instance is located
-  region: us4
+  region: us3
   # The URL of the Sysdig Secure API (required only when region is custom)
   api_url:
   collector:
@@ -34,11 +34,11 @@ sysdig_endpoint:
 features:
   admission_control:
     # Enable the admission control feature
-    enabled: false
+    enabled: true
     # The policy to apply when a request is denied
     failure_policy: Ignore
     # Enable the dry run mode
-    dry_run: true
+    dry_run: false
     # The timeout for the admission control feature
     timeout: 10
     # The port that will be used to expose admission control endpoints
@@ -47,7 +47,7 @@ features:
     excluded_namespaces: []
     container_vulnerability_management:
       # Enable the container vulnerability management feature on the admission control
-      enabled: false
+      enabled: true
 
   kubernetes_metadata:
     # Enable the Kubernetes Metadata feature on cluster shield
