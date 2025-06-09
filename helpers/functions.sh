@@ -76,13 +76,13 @@ update_vz_vastid() {
 
         if [[ "$RESPONSE" == "yes" ]]; then
             while true; do
-                read -p "Enter the new value for 'vz-vastid' (only lowercase letters and numbers, max length 10): " NEW_VZ_VASTID
+                read -p "Enter the new value for 'vz-vastid' (only numbers, max length 10): " NEW_VZ_VASTID
 
-                # Validate the input: only lowercase letters and numbers, max length 10
-                if [[ "$NEW_VZ_VASTID" =~ ^[a-z0-9]{1,10}$ ]]; then
+                # Validate the input: only numbers, max length 10
+                if [[ "$NEW_VZ_VASTID" =~ ^[0-9]{1,10}$ ]]; then
                     break
                 else
-                    echo "Invalid input. Please enter only lowercase letters and numbers with a maximum length of 10."
+                    echo "Invalid input. Please enter only numbers with a maximum length of 10."
                 fi
             done
 
