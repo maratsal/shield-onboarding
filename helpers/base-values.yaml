@@ -151,6 +151,9 @@ features:
       prometheus_yaml: {}
     statsd:
       enabled: false
+    # Required for kuberntes live
+    kube_state_metrics:
+      enabled: true
 
 host_windows:
   # Enable the host shield for Windows
