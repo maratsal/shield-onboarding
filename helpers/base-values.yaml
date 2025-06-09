@@ -403,7 +403,9 @@ host:
     type: RollingUpdate
     rollingUpdate: {}
   # The custom environment variables for the host shield
-  env: []
+  env:
+    - name: SCANNER_RUN_TIMEOUT
+      value: 3h
   # The custom volumes for the host shield
   volumes: []
   # The custom volume mounts for the host shield
