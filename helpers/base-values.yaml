@@ -34,7 +34,7 @@ sysdig_endpoint:
 features:
   admission_control:
     # Enable the admission control feature
-    enabled: true
+    enabled: false
     # The policy to apply when a request is denied
     failure_policy: Ignore
     # Enable the dry run mode
