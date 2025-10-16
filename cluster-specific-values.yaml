@@ -16,7 +16,23 @@ host:
   priority_class:
     # OPTIONAL - The name of the priority class, typically system-node-critical
     name:
-
+  tolerations:
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/master
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/control-plane
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/controlplane
+      operator: Equal
+      value: "true"
+    - effect: NoExecute
+      key: node-role.kubernetes.io/etcd
+      operator: Equal
+      value: "true"
+    - effect: NoExecute
+      key: CriticalAddonsOnly
+      operator: Equal
+      value: "true"
 cluster:
 
 proxy:
