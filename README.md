@@ -7,5 +7,6 @@
 1. run ./helpers/pre-install-validation.sh
 2. edit cluster-specific-values.yaml
 3. helm upgrade --install --create-namespace -n <UPDATE-NAMESPACE-NAME> -f ./helpers/base-values.yaml -f cluster-specific-values.yaml shield shield-1.21.1.tgz
-4. run ./helpers/post-install-validation.sh
+4. helm upgrade --install --create-namespace -n <UPDATE-NAMESPACE-NAME> -f ./helpers/base-values.yaml -f cluster-specific-values.yaml shield sysdig/shield
+5. run ./helpers/post-install-validation.sh
 
