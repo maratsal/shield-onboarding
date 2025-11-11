@@ -100,7 +100,7 @@ features:
       enabled: true
     kubernetes_audit:
       # Enable the Kubernetes Audit feature on cluster shield
-      enabled: false
+      enabled: true
       # The timeout for the audit feature
       timeout: 10
       # The port that will be used to expose the audit endpoints
